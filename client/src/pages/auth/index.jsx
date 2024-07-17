@@ -5,15 +5,30 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsTrigger, TabsList } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import {apiClient} from '@/lib/api-client';
-import { SIGNUP_ROUTE } from "@/utils/constants";
+import {apiClient} from '@/lib/api-client.js';
+import { SIGNUP_ROUTE, LOGIN_ROUTE } from "@/utils/constants";
+import { useNavigate } from "react-router-dom";
+import { useAppStore } from "@/store";
 
 
 const Auth = () => {
-
+    const navigate = useNavigate();
+    const {setUserInfo} = useAppStore();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const validateLogin =()=>{
+      if (!email.length) {
+        toast.error("Email is required");
+        return false;
+      }
+      if (!password.length) {
+        toast.error("Password is required");
+        return false;
+      }
+      return true;
+    }
 
    const validateSignUp = ()=>{
     if(!email.length){
@@ -31,14 +46,31 @@ const Auth = () => {
    };
 
     const handleLogin = async()=>{
-        
-    }
+        if(validateLogin()){
+          const response = await apiClient.post(LOGIN_ROUTE,{email, password},{withCredentials:true});
+          if(response.data.user.id){
+            setUserInfo(response.data.user);
+            if(response.data.user.profileSetup){
+              navigate('/chat')
+            }
+            else{
+              navigate("/profile");
+            }
+          }
+          console.log({response});
+        }
+    };
+
     const handleSignUp = async()=>{
       if(validateSignUp()){
-        const response = await apiClient.post(SIGNUP_ROUTE,{email, password});
+        const response = await apiClient.post(SIGNUP_ROUTE,{email, password},{withCredentials:true});
+        if (response.status() == 201) {
+          setUserInfo(response.data.user);
+          navigate("/profile");
+        }
         console.log({response});
       }
-    }
+    };
 
   return (
     <div className="h-[100vh] w-[100vw] flex items-center justify-center">
@@ -54,7 +86,7 @@ const Auth = () => {
             </p>
           </div>
           <div className="flex items-center justify-center w-full">
-            <Tabs className="w-3/4">
+            <Tabs className="w-3/4" defaultValue="login">
               <TabsList className="flex bg-transparent rounded-none w-full">
                 <TabsTrigger
                   value="login"
@@ -118,7 +150,11 @@ const Auth = () => {
           </div>
         </div>
         <div className="flex justify-center items-center">
-            <img src={Background} alt="background-image" className="hidden xl:h-[700px]" />
+          <img
+            src={Background}
+            alt="background-image"
+            className="hidden xl:h-[700px]"
+          />
         </div>
       </div>
     </div>

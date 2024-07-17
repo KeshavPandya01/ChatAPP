@@ -4,14 +4,14 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     email:{
         type: String,
-        required: [true,"Email is required."],
+        required: [true,"Email is Required."],
         unique: true,
     },
     password:{
         type: String,
         required:[true, "Password is Required"],
     },
-    firstname: {
+    firstName: {
         type: String,
         required: false,
     },
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     profileSetup:{
         type:Boolean,
         default: false,
-    }
+    },
 });
 
 
