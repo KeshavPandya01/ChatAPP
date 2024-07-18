@@ -17,7 +17,7 @@ app.use(cors({
     credentials: true,
 }))
 
-app.use("/uploads/profiles", express.static("/uploads/profiles"));
+app.use("/uploads/profiles", express.static("uploads/profiles"));
 
 app.use(cookieParser());
 
