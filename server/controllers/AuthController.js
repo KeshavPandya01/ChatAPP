@@ -136,7 +136,7 @@ export const addProfileImage = async (request, response, next) => {
       return response.status(400).send("File is required.");
     }
     const date = Date.now();
-    let fileName = "uploads/profiles" + date + request.file.originalname;
+    let fileName = "uploads/profiles/" + date + request.file.originalname;
     renameSync(request.file.path, fileName);
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -155,23 +155,21 @@ export const addProfileImage = async (request, response, next) => {
 export const removeProfileImage = async (request, response, next) => {
   try {
     const { userId } = request;
+
     const user = await User.findById(userId);
 
     if(!user){
-        response.status(404).send("User not found.");
+      response.status(404).send("User not found.");
     }
-
+    
     if(user.image){
         unlinkSync(user.image)
     }
+
     user.image=null;
     await user.save();
 
-    const userData = await User.findByIdAndUpdate(
-      userId,
-      { firstName, lastName, color, profileSetup: true },
-      { new: true, runValidators: true }
-    );
+  
 
     return response.status(200).send("Profile image removed successfully.")
   } catch (error) {

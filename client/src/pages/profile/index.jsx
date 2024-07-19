@@ -100,8 +100,8 @@ const Profile = () => {
   const handleDeleteImage = async () => {
     try {
       const response = await apiClient.delete(REMOVE_PROFILE_IMAGE_ROUTE, {
-        withCredentials: true,
-      });
+        withCredentials: true});
+        
       if(response.status===200){
         setUserInfo({...userInfo, image:null});
         toast.success("Image removed successfully.");
