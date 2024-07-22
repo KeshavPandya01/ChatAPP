@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import { request, response } from "express";
 import { renameSync, unlinkSync } from "fs";
 
+
+
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 const createToken = (email, userId) => {
@@ -172,6 +174,20 @@ export const removeProfileImage = async (request, response, next) => {
   
 
     return response.status(200).send("Profile image removed successfully.")
+  } catch (error) {
+    console.log({ error });
+    return response.status(500).send("Inernal Server Error");
+  }
+};
+
+export const logout = async (request, response, next) => {
+  try {
+    response.cookie("jwt", "", {
+      maxAge: 1,
+      secure: true,
+      sameSite: "None"
+    });
+    return response.status(200).send("Logout successfull.")
   } catch (error) {
     console.log({ error });
     return response.status(500).send("Inernal Server Error");
