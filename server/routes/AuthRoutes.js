@@ -26,4 +26,5 @@ authRoutes.post(
 );
 authRoutes.delete("/remove-profile-image", verifyToken, removeProfileImage);
 authRoutes.post("/logout", logout);
+
 export default authRoutes;

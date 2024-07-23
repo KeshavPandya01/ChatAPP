@@ -51,7 +51,7 @@ export const login = async (request, response, next) => {
 
     const user = await User.findOne({ email });
 
-    if (!User) {
+    if (!user) {
       return response.status(400).send("User with the given email not found");
     }
 
