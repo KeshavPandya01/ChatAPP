@@ -14,7 +14,7 @@ const createToken = (email, userId) => {
   });
 };
 
-export const signup = async (request, response, next) => {
+export const signup = async (request, response) => {
   try {
     const { email, password } = request.body;
 
@@ -54,10 +54,12 @@ export const login = async (request, response, next) => {
     if (!user) {
       return response.status(400).send("User with the given email not found");
     }
-
+    console.log(user.password)
+    
     const auth = await compare(password, user.password);
+    console.log(auth)
     if (!auth) {
-      return response.status(400).send("Password is incorrect");
+      return response.status(400).send("Password is incorrecyyyt");
     }
     response.cookie("jwt", createToken(email, user.id), {
       maxAge,
@@ -88,8 +90,7 @@ export const getUserInfo = async (request, response, next) => {
       return response.status(404).send("User with the given id not found");
     }
     return response.status(200).json({
-      id: userData.id,
-      email: userData.email,
+      id: userData.id, email: userData.email,
       profileSetup: userData.profileSetup,
       firstName: userData.firstName,
       lastName: userData.lastName,
