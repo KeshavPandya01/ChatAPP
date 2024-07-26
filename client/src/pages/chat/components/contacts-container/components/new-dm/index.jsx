@@ -69,7 +69,7 @@ const NewDM = () => {
             <Input
               placeholder="Search Contacts"
               className="rounded-lg p-6 bg-[#2c2e3b] border-none"
-              onchange={(e) => searchContacts(e.target.value)}
+              onChange={(e) => searchContacts(e.target.value)}
             />
           </div>
           <ScrollArea className="h-[250px]">
