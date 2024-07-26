@@ -21,8 +21,11 @@ import { apiClient } from "@/lib/api-client";
 import { HOST, SEARCH_CONTACTS_ROUTES } from "@/utils/constants";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useAppStore } from "@/store";
 
 const NewDM = () => {
+    
+
   const [openNewContactModel, setOpenNewContactModel] = useState(false);
   const [searchedContacts, setSearchedContacts] = useState([]);
 
@@ -44,6 +47,11 @@ const NewDM = () => {
       console.log({ error });
     }
   };
+
+  const selectNewContact = (contact)=>{
+      setOpenNewContactModel(false);
+      setSearchedContacts([]);
+  }
   return (
     <>
       <TooltipProvider>
@@ -78,6 +86,7 @@ const NewDM = () => {
                 <div
                   key={contact._id}
                   className="flex gap-3 items-center cursor-pointer"
+                  onClick={()=>selectNewContact(contact)}
                 >
                   <div className="w-12 h-12 relative">
                     <Avatar className="h-12 w-12 rounded-full overflow-hidden">
