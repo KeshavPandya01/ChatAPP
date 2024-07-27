@@ -25,7 +25,7 @@ import { useAppStore } from "@/store";
 
 const NewDM = () => {
     
-
+  const { setSelectedChatType, setSelectedChatData } = useAppStore();
   const [openNewContactModel, setOpenNewContactModel] = useState(false);
   const [searchedContacts, setSearchedContacts] = useState([]);
 
@@ -50,6 +50,8 @@ const NewDM = () => {
 
   const selectNewContact = (contact)=>{
       setOpenNewContactModel(false);
+      setSelectedChatType("contact");
+      setSelectedChatData(contact);
       setSearchedContacts([]);
   }
   return (
@@ -80,6 +82,9 @@ const NewDM = () => {
               onChange={(e) => searchContacts(e.target.value)}
             />
           </div>
+          {
+            searchContacts.length > 0 && (
+          
           <ScrollArea className="h-[250px]">
             <div className="flex flex-col gap-5">
               {searchedContacts.map((contact) => (
@@ -120,9 +125,9 @@ const NewDM = () => {
                 </div>
               ))}
             </div>
-          </ScrollArea>
+          </ScrollArea> )}
           {searchedContacts.length <= 0 && (
-            <div className="flex-1 md:bg-[#1c1d25] md:flex mt-5 flex-col justify-center items-center hidden duration-1000 transition-all">
+            <div className="flex-1 md:flex md:mt-0 mt-5 flex-col justify-center items-center  duration-1000 transition-all">
               <Lottie
                 isClickToPauseDisabled={true}
                 height={100}
