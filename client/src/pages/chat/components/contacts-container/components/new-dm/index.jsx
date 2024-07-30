@@ -53,6 +53,7 @@ const NewDM = () => {
       setSelectedChatType("contact");
       setSelectedChatData(contact);
       setSearchedContacts([]);
+      console.log(contact)
   }
   return (
     <>
@@ -73,7 +74,6 @@ const NewDM = () => {
         <DialogContent className="bg-[#181920] border-none text-white w-[400px] h-[400px] flex flex-col">
           <DialogHeader>
             <DialogTitle>Please Select a contact</DialogTitle>
-            <DialogDescription></DialogDescription>
           </DialogHeader>
           <div>
             <Input
@@ -118,7 +118,7 @@ const NewDM = () => {
                     <span>
                       {contact.firstName && contact.lastName
                         ? `${contact.firstName}${contact.lastName}`
-                        : ""}
+                        : contact.email}
                     </span>
                     <span className="text-xs">{contact.email}</span>
                   </div>

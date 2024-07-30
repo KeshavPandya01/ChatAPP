@@ -12,7 +12,7 @@ const setupSocket = (server) => {
   const userSocketMap = new Map();
 
   const disconnect = (socket) => {
-    console.log(`Client Disconnect: ${socket.id}`);
+    console.log(`Client Disconnected: ${socket.id}`);
     for (const [userId, socketId] of userSocketMap.entries()) {
       if (socketId === socket.id) {
         userSocketMap.delete(userId);
@@ -28,15 +28,13 @@ const setupSocket = (server) => {
 
       const createdMessage = await Message.create(message);
 
-      const messageData = await Message.findById(createdMessage._id)
-        .populate("sender", "id email firstName lastName image color")
-        .populate("recipient", "id email firstName lastName image color");
+      const messageData = await Message.findById(createdMessage._id).populate("sender", "id email firstName lastName image color").populate("recipient", "id email firstName lastName image color");
 
       if (recipientSocketId) {
-        io.to(recipientSocketId).emit("receiveMessage", messageData);
+        io.to(recipientSocketId).emit("recieveMessage", messageData);
       }
       if (senderSocketId) {
-        io.to(senderSocketId).emit("receiveMessage", messageData);
+        io.to(senderSocketId).emit("recieveMessage", messageData);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -54,9 +52,8 @@ const setupSocket = (server) => {
     }
 
     socket.on("sendMessage", sendMessage);
-    socket.on("disconnect", () => {
-      disconnect(socket);
-    });
+    socket.on("disconnect", () => disconnect(socket)
+    );
   });
 };
 

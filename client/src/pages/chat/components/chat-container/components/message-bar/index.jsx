@@ -1,5 +1,5 @@
-import { useSocket } from "@/context/SocketContext";
 import { useAppStore } from "@/store";
+import { useSocket } from "@/context/SocketContext";
 import EmojiPicker from "emoji-picker-react";
 import  { useEffect, useRef, useState } from "react";
 import {GrAttachment} from 'react-icons/gr'
@@ -31,13 +31,13 @@ const MessageBar = () => {
 
     const handleSendMessage = async()=>{
       if(selectedChatType==="contact"){
-        socket.emit("sendMessage",{
+        socket.emit("sendMessage", {
           sender: userInfo.id,
           content: message,
-          recipient:selectedChatData._id,
+          recipient: selectedChatData._id,
           messageType: "text",
           fileURL: undefined,
-        })
+        });
       }
     }
   return (
