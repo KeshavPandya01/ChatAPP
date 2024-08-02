@@ -9,32 +9,35 @@ const setupSocket = (server) => {
       credentials: true,
     },
   });
+
   const userSocketMap = new Map();
 
   const disconnect = (socket) => {
     console.log(`Client Disconnected: ${socket.id}`);
-    for (const [userId, socketId] of userSocketMap.entries()) {
-      if (socketId === socket.id) {
-        userSocketMap.delete(userId);
-        break;
+    userSocketMap.forEach((value, key) => {
+      if (value === socket.id) {
+        userSocketMap.delete(key);
       }
-    }
+    });
   };
 
   const sendMessage = async (message) => {
     try {
+      console.log("Received message to send:", message);
       const senderSocketId = userSocketMap.get(message.sender);
       const recipientSocketId = userSocketMap.get(message.recipient);
 
       const createdMessage = await Message.create(message);
 
-      const messageData = await Message.findById(createdMessage._id).populate("sender", "id email firstName lastName image color").populate("recipient", "id email firstName lastName image color");
+      const messageData = await Message.findById(createdMessage._id)
+        .populate("sender", "id email firstName lastName image color")
+        .populate("recipient", "id email firstName lastName image color");
 
       if (recipientSocketId) {
-        io.to(recipientSocketId).emit("recieveMessage", messageData);
+        io.to(recipientSocketId).emit("receiveMessage", messageData);
       }
       if (senderSocketId) {
-        io.to(senderSocketId).emit("recieveMessage", messageData);
+        io.to(senderSocketId).emit("receiveMessage", messageData);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -52,8 +55,7 @@ const setupSocket = (server) => {
     }
 
     socket.on("sendMessage", sendMessage);
-    socket.on("disconnect", () => disconnect(socket)
-    );
+    socket.on("disconnect", () => disconnect(socket));
   });
 };
 

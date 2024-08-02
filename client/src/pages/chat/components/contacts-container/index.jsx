@@ -1,7 +1,22 @@
+import { useEffect } from "react";
 import NewDM from "./components/new-dm";
 import ProfileInfo from "./components/profile-info";
+import { apiClient } from "@/lib/api-client";
+import { GET_DM_CONTACTS_ROUTES } from "@/utils/constants";
 
 const ContactsContainer = () => {
+  useEffect(() => {
+    const getContacts = async () => {
+      const response = await apiClient.get(GET_DM_CONTACTS_ROUTES, {
+        withCredentials: true,
+      });
+      if (response.data.contacts) {
+        console.log(response.data.contacts);
+      }
+    };
+    getContacts();
+  }, []);
+
   return (
     <div className="  relative md:w-[35vw] lg:w-[30vw] bg-[#1b1c24] border-2 border-[#2f303b] w-full">
       <div className="pt-3">
@@ -10,13 +25,13 @@ const ContactsContainer = () => {
       <div className="my-5">
         <div className="flex justify-between items-center pr-10">
           <Title text="Direct Messages" />
-          <NewDM/>
+          <NewDM />
         </div>
         <div className="flex justify-between items-center pr-10">
           <Title text="Channels" />
         </div>
       </div>
-      <ProfileInfo/>
+      <ProfileInfo />
     </div>
   );
 };
